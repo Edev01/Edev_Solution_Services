@@ -1,6 +1,7 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { resolveContactService } from "@/lib/contact-services";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -9,7 +10,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-export default function ContactPage() {
+type Props = {
+  searchParams: Promise<{ service?: string }>;
+};
+
+export default async function ContactPage({ searchParams }: Props) {
+  const params = await searchParams;
+  const initialService = resolveContactService(params.service);
+
   return (
     <section className="pt-28 pb-20 md:pt-36 md:pb-28">
       <div className="shell grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
@@ -21,11 +29,19 @@ export default function ContactPage() {
           <p className="mt-6 max-w-md text-fog">
             Share a short brief and we’ll get back to you from our inbox.
           </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <a href={siteConfig.phoneHref} className="btn">
+          {initialService ? (
+            <p className="mt-4 mono text-[0.68rem] uppercase tracking-[0.14em] text-lilac">
+              Preselected · {initialService}
+            </p>
+          ) : null}
+          <div className="mt-10 flex flex-col gap-3">
+            <a href={siteConfig.phoneHref} className="btn w-full sm:w-auto">
               {siteConfig.phoneDisplay}
             </a>
-            <a href={`mailto:${siteConfig.email}`} className="btn btn-ghost">
+            <a
+              href={`mailto:${siteConfig.email}`}
+              className="btn btn-ghost w-full break-all sm:w-auto"
+            >
               {siteConfig.email}
             </a>
           </div>
@@ -38,7 +54,7 @@ export default function ContactPage() {
         </div>
 
         <div className="border border-line bg-panel p-5 sm:p-8">
-          <ContactForm />
+          <ContactForm initialService={initialService} />
         </div>
       </div>
     </section>

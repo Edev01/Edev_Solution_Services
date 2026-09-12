@@ -27,6 +27,7 @@ export function Hero() {
   const fade = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
   const scaleBg = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
   const lineW = useTransform(scrollYProgress, [0, 0.4], ["0%", "100%"]);
+  const logoY = useTransform(scrollYProgress, [0, 1], [0, 90]);
 
   return (
     <section
@@ -59,6 +60,35 @@ export function Hero() {
         aria-hidden
       />
 
+      {/* Floating brand mark */}
+      <motion.div
+        style={{ y: logoY }}
+        className="pointer-events-none absolute right-3 top-24 z-[2] w-28 sm:right-8 sm:top-28 sm:w-40 md:right-10 md:top-28 md:w-72 lg:right-14 lg:top-24 lg:w-80 xl:w-96"
+        aria-hidden
+      >
+        <motion.div
+          animate={{
+            y: [0, -14, 0],
+            rotate: [0, 6, -4, 0],
+          }}
+          transition={{
+            duration: 9,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="relative aspect-square overflow-hidden"
+        >
+          <Image
+            src="/logo-mark.png"
+            alt=""
+            fill
+            className="object-contain object-center opacity-70"
+            priority
+            unoptimized
+          />
+        </motion.div>
+      </motion.div>
+
       <motion.div
         style={{ opacity: fade }}
         className="relative z-10 flex flex-1 flex-col justify-center py-8 sm:py-10"
@@ -73,7 +103,7 @@ export function Hero() {
             Studio · Built to ship
           </motion.p>
 
-          <h1 className="mega text-[clamp(2.5rem,12vw,8.5rem)] leading-[0.92] text-paper">
+          <h1 className="mega max-w-[11ch] text-[clamp(2.5rem,12vw,8.5rem)] leading-[0.92] text-paper">
             <motion.span
               className="block"
               initial={{ opacity: 0, y: 28 }}
@@ -98,7 +128,7 @@ export function Hero() {
 
           <motion.div
             style={{ width: lineW }}
-            className="mt-5 h-px bg-gradient-to-r from-signal via-lilac to-transparent sm:mt-6"
+            className="mt-5 h-px max-w-[min(100%,22rem)] bg-gradient-to-r from-signal via-lilac to-transparent sm:mt-6 sm:max-w-[min(100%,28rem)] md:max-w-[min(100%,36rem)]"
           />
 
           <motion.div
@@ -109,7 +139,7 @@ export function Hero() {
           >
             <p className="max-w-md text-[0.95rem] leading-relaxed text-fog sm:max-w-xl sm:text-base md:text-lg">
               <span className="sm:hidden">
-                Agentic systems, cloud, web, and mobile — shaped as one product
+                Agentic systems, cloud, web, and mobile, shaped as one product
                 surface.
               </span>
               <span className="hidden sm:inline">

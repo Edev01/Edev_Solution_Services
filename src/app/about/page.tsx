@@ -6,7 +6,7 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
-  description: `About ${siteConfig.legalName} — agentic AI, cloud, web, and mobile systems built as one product surface.`,
+  description: `About ${siteConfig.legalName}, agentic AI, cloud, web, and mobile systems built as one product surface.`,
   alternates: { canonical: "/about" },
 };
 
@@ -55,7 +55,7 @@ export default function AboutPage() {
           </h1>
           <p className="mt-8 max-w-2xl text-base leading-relaxed text-fog md:text-lg">
             {siteConfig.name} is a solutions studio for web platforms, mobile
-            products, cloud infrastructure, and autonomous agent workflows —
+            products, cloud infrastructure, and autonomous agent workflows,
             delivered with one visual language and one engineering standard.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">

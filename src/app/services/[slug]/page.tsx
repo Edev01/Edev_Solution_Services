@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CTABand } from "@/components/home/CTABand";
 import { getService, services } from "@/data/content";
+import { contactHrefForService } from "@/lib/contact-services";
 import { siteConfig } from "@/lib/site";
 
 type Props = {
@@ -52,7 +53,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             {service.description}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/contact" className="btn">
+            <Link href={contactHrefForService(service.slug)} className="btn">
               Discuss this service
             </Link>
             <Link href="/services" className="btn btn-ghost">
@@ -137,7 +138,7 @@ export default async function ServiceDetailPage({ params }: Props) {
         </div>
       </section>
 
-      <CTABand />
+      <CTABand serviceSlug={service.slug} />
     </>
   );
 }

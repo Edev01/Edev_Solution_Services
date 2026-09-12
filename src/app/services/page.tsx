@@ -7,7 +7,7 @@ import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Services",
-  description: `Explore ${siteConfig.name} services — agentic AI, cloud, web, mobile, DevOps, automation, ML, and more.`,
+  description: `Explore ${siteConfig.name} services, agentic AI, cloud, web, mobile, DevOps, automation, ML, and more.`,
   alternates: { canonical: "/services" },
   keywords: [
     ...siteConfig.keywords,

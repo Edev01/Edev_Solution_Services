@@ -57,21 +57,26 @@ function TiltCard({
 
 export function ServicesPreview() {
   const sectionRef = useRef<HTMLElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const featured = services.slice(0, 8);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
+    const scroller = scrollerRef.current;
     const track = trackRef.current;
-    if (!section || !track) return;
+    if (!section || !scroller || !track) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
-
     const mm = gsap.matchMedia();
 
+    // Desktop: pin + horizontal scrub (unchanged behavior)
     mm.add("(min-width: 900px)", () => {
-      const getTotal = () => Math.max(track.scrollWidth - window.innerWidth + 64, 0);
+      if (reduced) return;
+
+      const getTotal = () =>
+        Math.max(track.scrollWidth - window.innerWidth + 64, 0);
+
       const tween = gsap.to(track, {
         x: () => -getTotal(),
         ease: "none",
@@ -79,15 +84,136 @@ export function ServicesPreview() {
           trigger: section,
           start: "top top",
           end: () => `+=${Math.max(getTotal(), 700)}`,
-          scrub: true,
+          scrub: 1,
           pin: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
+
+      const refresh = () => ScrollTrigger.refresh();
+      window.addEventListener("load", refresh);
+      requestAnimationFrame(refresh);
+
       return () => {
+        window.removeEventListener("load", refresh);
         tween.scrollTrigger?.kill();
         tween.kill();
+        gsap.set(track, { clearProps: "x" });
+      };
+    });
+
+    // Mobile / tablet: continuous slow slide, brief pause on each card, rewind at end
+    mm.add("(max-width: 899px)", () => {
+      if (reduced) return;
+
+      let index = 0;
+      let userTouching = false;
+      let resumeDelay: gsap.core.Tween | null = null;
+      const cards = Array.from(track.children) as HTMLElement[];
+      if (!cards.length) return;
+
+      const killMotion = () => {
+        gsap.killTweensOf(scroller);
+        resumeDelay?.kill();
+        resumeDelay = null;
+      };
+
+      const leftFor = (i: number) => {
+        const card = cards[i];
+        if (!card) return 0;
+        return Math.max(
+          0,
+          card.offsetLeft -
+            Math.max(0, (scroller.clientWidth - card.offsetWidth) / 2)
+        );
+      };
+
+      const syncIndexFromScroll = () => {
+        const mid = scroller.scrollLeft + scroller.clientWidth / 2;
+        let nearest = 0;
+        let best = Infinity;
+        cards.forEach((card, i) => {
+          const c = card.offsetLeft + card.offsetWidth / 2;
+          const d = Math.abs(c - mid);
+          if (d < best) {
+            best = d;
+            nearest = i;
+          }
+        });
+        index = nearest;
+      };
+
+      const advance = () => {
+        if (userTouching) return;
+
+        // At last card (All services): continuous rewind to first, pause, continue
+        if (index >= cards.length - 1) {
+          const distance = scroller.scrollLeft;
+          gsap.to(scroller, {
+            scrollLeft: 0,
+            duration: Math.max(1.6, distance / 220),
+            ease: "power1.inOut",
+            overwrite: true,
+            onComplete: () => {
+              index = 0;
+              if (userTouching) return;
+              resumeDelay = gsap.delayedCall(1.1, advance);
+            },
+          });
+          return;
+        }
+
+        const next = index + 1;
+        const from = scroller.scrollLeft;
+        const to = leftFor(next);
+        const distance = Math.abs(to - from);
+        // Continuous sliding (not a snap jump)
+        const duration = Math.max(2.2, Math.min(4.2, distance / 95));
+
+        gsap.to(scroller, {
+          scrollLeft: to,
+          duration,
+          ease: "none",
+          overwrite: true,
+          onComplete: () => {
+            index = next;
+            if (userTouching) return;
+            // Brief stop while this card is showing, then slide again
+            resumeDelay = gsap.delayedCall(1.15, advance);
+          },
+        });
+      };
+
+      const onTouchStart = () => {
+        userTouching = true;
+        killMotion();
+      };
+
+      const onTouchEnd = () => {
+        userTouching = false;
+        syncIndexFromScroll();
+        resumeDelay = gsap.delayedCall(0.85, advance);
+      };
+
+      scroller.addEventListener("touchstart", onTouchStart, { passive: true });
+      scroller.addEventListener("touchend", onTouchEnd, { passive: true });
+      scroller.addEventListener("pointerdown", onTouchStart);
+      window.addEventListener("pointerup", onTouchEnd);
+
+      requestAnimationFrame(() => {
+        scroller.scrollLeft = leftFor(0);
+        index = 0;
+        // Short pause on first card, then start continuous slides
+        resumeDelay = gsap.delayedCall(1.2, advance);
+      });
+
+      return () => {
+        killMotion();
+        scroller.removeEventListener("touchstart", onTouchStart);
+        scroller.removeEventListener("touchend", onTouchEnd);
+        scroller.removeEventListener("pointerdown", onTouchStart);
+        window.removeEventListener("pointerup", onTouchEnd);
       };
     });
 
@@ -106,7 +232,10 @@ export function ServicesPreview() {
         </h2>
       </div>
 
-      <div className="overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:overflow-visible md:flex md:h-screen md:items-center md:pb-0 md:pt-28 [&::-webkit-scrollbar]:hidden">
+      <div
+        ref={scrollerRef}
+        className="overflow-x-auto overscroll-x-contain pb-2 [-ms-overflow-style:none] [scrollbar-width:none] touch-pan-x md:overflow-visible md:flex md:h-screen md:items-center md:pb-0 md:pt-28 [&::-webkit-scrollbar]:hidden"
+      >
         <div ref={trackRef} className="service-rail">
           {featured.map((service, i) => (
             <TiltCard

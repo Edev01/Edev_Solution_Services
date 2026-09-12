@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Native scroll only — no Lenis lag. Keeps ScrollTrigger in sync. */
+/** Native scroll only — instant wheel feedback, no start/stop smoothing. */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const refresh = () => ScrollTrigger.refresh();

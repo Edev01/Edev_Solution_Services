@@ -1,26 +1,28 @@
 ﻿"use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { FieldSelect } from "@/components/ui/FieldSelect";
+import { contactServiceOptions } from "@/lib/contact-services";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-const serviceOptions = [
-  { value: "Agentic AI", label: "Agentic AI" },
-  { value: "Cloud Infrastructure", label: "Cloud Infrastructure" },
-  { value: "Web Platforms", label: "Web Platforms" },
-  { value: "Mobile Applications", label: "Mobile Applications" },
-  { value: "DevOps & SRE", label: "DevOps & SRE" },
-  { value: "Automation & RPA", label: "Automation & RPA" },
-  { value: "Machine Learning", label: "Machine Learning" },
-  { value: "UI / UX Design", label: "UI / UX Design" },
-  { value: "Other", label: "Other" },
-];
+const options = contactServiceOptions.map(({ value, label }) => ({
+  value,
+  label,
+}));
 
-export function ContactForm() {
+export function ContactForm({
+  initialService = "",
+}: {
+  initialService?: string;
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
-  const [service, setService] = useState("");
+  const [service, setService] = useState(initialService);
+
+  useEffect(() => {
+    setService(initialService);
+  }, [initialService]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -53,7 +55,7 @@ export function ContactForm() {
       setStatus("success");
       setMessage("Message sent. We’ll get back to you soon.");
       form.reset();
-      setService("");
+      setService(initialService || "");
     } catch (err) {
       setStatus("error");
       setMessage(
@@ -66,6 +68,15 @@ export function ContactForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-4" noValidate>
+      {service ? (
+        <div className="flex flex-wrap items-center gap-2 border border-line bg-ink px-3 py-2">
+          <span className="mono text-[0.62rem] uppercase tracking-[0.14em] text-lilac">
+            Interested in
+          </span>
+          <span className="text-sm text-paper">{service}</span>
+        </div>
+      ) : null}
+
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block space-y-2">
           <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
@@ -101,7 +112,7 @@ export function ContactForm() {
             type="tel"
             autoComplete="tel"
             className="field"
-            placeholder="+92 335 2389952"
+            placeholder="+92 321 8995279"
           />
         </label>
         <label className="block space-y-2">
@@ -124,7 +135,7 @@ export function ContactForm() {
         <FieldSelect
           name="service"
           placeholder="Select a service"
-          options={serviceOptions}
+          options={options}
           value={service}
           onChange={setService}
         />
