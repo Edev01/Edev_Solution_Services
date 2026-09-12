@@ -1,63 +1,66 @@
-﻿import Image from "next/image";
-import { FadeIn } from "@/components/ui/FadeIn";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { GlassButton } from "@/components/ui/GlassButton";
+﻿"use client";
 
-const pillars = [
-  {
-    title: "Agentic by design", body: "Multi-agent workflows with guardrails, memory, and evaluation, intelligence that operates, not demos.", }, {
-    title: "Cloud that stays quiet", body: "Landing zones, pipelines, and observability engineered so shipping feels boring in the best way.", }, {
-    title: "Product craft", body: "Web and mobile surfaces with glass-calm interaction, performance budgets, and SEO from day one.", }, ];
+import Link from "next/link";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+
+const lines = [
+  { text: "We design systems that think,", accent: false },
+  { text: "interfaces that stay calm,", accent: true },
+  { text: "and platforms that ship.", accent: false },
+];
 
 export function AboutTeaser() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const x = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [-2, 2]);
+
   return (
-    <section className="relative section-pad py-20 sm:py-24">
-      <div className="container-edev grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
-        <div className="img-frame relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-[2rem] glass lg:max-w-none">
-          <Image
-            src="/images/team.jpg"
-            alt="Product team building software together"
-            fill
-            className="object-cover opacity-90"
-            sizes="(max-width: 1024px) 28rem, 40vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-edev-ink/85 via-edev-violet/25 to-transparent" />
-          <div className="absolute bottom-0 p-6">
-            <p className="display text-2xl font-semibold text-white">
-              Web · Mobile · Agentic
-            </p>
-            <p className="mt-2 text-sm text-edev-mist/75">
-              Built for teams who need speed without sacrificing craft.
-            </p>
-          </div>
-        </div>
+    <section ref={ref} className="relative overflow-hidden py-20 md:py-32">
+      <motion.p
+        style={{ x, rotate }}
+        className="pointer-events-none absolute left-[-5%] top-12 mega whitespace-nowrap text-[clamp(3.5rem,16vw,12rem)] text-line/90"
+        aria-hidden
+      >
+        SIGNAL · SYSTEMS · SHIP
+      </motion.p>
 
+      <div className="shell relative z-10 grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-14">
         <div>
-          <FadeIn>
-            <SectionHeading
-              eyebrow="About Edev"
-              title="A solutions studio for the agentic era"
-              description="Edev blends software engineering, cloud architecture, and product design into one delivery motion, so your stack compounds instead of fragmenting."
-            />
-          </FadeIn>
-
-          <div className="mt-8 space-y-4">
-            {pillars.map((pillar) => (
-              <div key={pillar.title} className="rounded-2xl glass-soft p-5">
-                <h3 className="display text-lg font-semibold text-white">
-                  {pillar.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-edev-mist/70">
-                  {pillar.body}
-                </p>
-              </div>
+          <p className="eyebrow">02 / About</p>
+          <div className="mt-5 space-y-1.5 sm:mt-6 sm:space-y-2">
+            {lines.map((line, i) => (
+              <motion.h2
+                key={line.text}
+                initial={{ opacity: 0, y: 36, clipPath: "inset(100% 0 0 0)" }}
+                whileInView={{ opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }}
+                viewport={{ once: true, margin: "-12%" }}
+                transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className={`display text-[clamp(1.65rem,5.2vw,3.75rem)] ${
+                  line.accent ? "grad-text" : "text-paper"
+                }`}
+              >
+                {line.text}
+              </motion.h2>
             ))}
           </div>
-
-          <div className="mt-8">
-            <GlassButton href="/about">Our story</GlassButton>
-          </div>
         </div>
+
+        <motion.div style={{ y }} className="max-w-md border border-line bg-panel p-6 lg:justify-self-end lg:p-8">
+          <p className="text-base leading-relaxed text-fog md:text-lg">
+            Edev Solutions blends agentic AI, cloud architecture, web and mobile
+            product craft into one delivery motion — so your stack compounds
+            instead of fragmenting.
+          </p>
+          <Link href="/about" className="btn mt-7">
+            Our story
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,78 +1,150 @@
-﻿import Image from "next/image";
-import { GlassButton } from "@/components/ui/GlassButton";
-import { Atmosphere } from "@/components/ui/Atmosphere";
+﻿"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { siteConfig } from "@/lib/site";
 
+const lanes = [
+  "Agentic AI",
+  "Cloud",
+  "Web Platforms",
+  "Mobile",
+  "DevOps",
+  "Automation",
+  "Machine Learning",
+  "Cybersecurity",
+];
+
 export function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const fade = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const scaleBg = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
+  const lineW = useTransform(scrollYProgress, [0, 0.4], ["0%", "100%"]);
+
   return (
-    <section className="relative min-h-[100svh] overflow-hidden pt-28 sm:pt-32">
-      <Atmosphere />
-      <div className="section-pad relative z-10 flex min-h-[calc(100svh-7rem)] items-end pb-16 sm:items-center sm:pb-20">
-        <div className="container-edev grid w-full items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
-          <div>
-            <div className="mb-6 inline-flex items-center gap-3">
-              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-[#1a0f36] sm:h-[4.5rem] sm:w-[4.5rem]">
-                <Image
-                  src="/logo.png"
-                  alt={`${siteConfig.name} logo`}
-                  width={64}
-                  height={64}
-                  className="h-12 w-12 object-contain sm:h-14 sm:w-14"
-                  priority
-                />
-              </span>
-              <span className="display text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
-                {siteConfig.name}
-              </span>
-            </div>
+    <section
+      ref={ref}
+      className="relative flex min-h-[100svh] flex-col overflow-hidden pt-20 sm:pt-28 md:pt-32"
+    >
+      <motion.div
+        style={{ scale: scaleBg }}
+        className="pointer-events-none absolute inset-0"
+        aria-hidden
+      >
+        <Image
+          src="/images/hero-atmosphere.png"
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-35 sm:opacity-45"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/65 to-ink" />
+        <div className="diamond-grid absolute inset-0 opacity-35 sm:opacity-50" />
+      </motion.div>
 
-            <h1 className="display text-balance text-3xl font-semibold leading-[1.08] text-white sm:text-4xl lg:text-5xl xl:text-[3.35rem]">
-              {siteConfig.tagline}
-            </h1>
+      <div
+        className="pointer-events-none absolute -left-28 top-24 h-48 w-48 rounded-full bg-orchid/25 blur-3xl sm:h-72 sm:w-72"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -right-24 bottom-40 h-44 w-44 rounded-full bg-signal/20 blur-3xl sm:h-64 sm:w-64"
+        aria-hidden
+      />
 
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-edev-mist/75 sm:text-lg">
-              Web, mobile, agentic AI, and cloud, built as one calm purple
-              stack with interfaces that feel like glass, not plastic.
+      <motion.div
+        style={{ opacity: fade }}
+        className="relative z-10 flex flex-1 flex-col justify-center py-8 sm:py-10"
+      >
+        <div className="shell">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            className="eyebrow mb-4 sm:mb-6"
+          >
+            Studio · Built to ship
+          </motion.p>
+
+          <h1 className="mega text-[clamp(2.5rem,12vw,8.5rem)] leading-[0.92] text-paper">
+            <motion.span
+              className="block"
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Edev
+            </motion.span>
+            <motion.span
+              className="grad-text block"
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.6,
+                delay: 0.06,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              Solutions
+            </motion.span>
+          </h1>
+
+          <motion.div
+            style={{ width: lineW }}
+            className="mt-5 h-px bg-gradient-to-r from-signal via-lilac to-transparent sm:mt-6"
+          />
+
+          <motion.div
+            className="mt-6 flex flex-col gap-6 sm:mt-8 sm:gap-8 lg:flex-row lg:items-end lg:justify-between"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <p className="max-w-md text-[0.95rem] leading-relaxed text-fog sm:max-w-xl sm:text-base md:text-lg">
+              <span className="sm:hidden">
+                Agentic systems, cloud, web, and mobile — shaped as one product
+                surface.
+              </span>
+              <span className="hidden sm:inline">
+                {siteConfig.tagline} Web, mobile, cloud, and agent workflows
+                shaped as one continuous product surface.
+              </span>
             </p>
 
-            <div className="mt-8 flex flex-nowrap gap-2 sm:gap-3">
-              <GlassButton
-                href="/contact"
-                size="lg"
-                className="min-w-0 flex-1 !px-3 !text-sm sm:flex-none sm:!px-7 sm:!text-base"
-              >
-                Talk to Edev
-              </GlassButton>
-              <GlassButton
+            <div className="flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap">
+              <Link href="/contact" className="btn w-full justify-center sm:w-auto">
+                Start a project
+              </Link>
+              <Link
                 href="/services"
-                size="lg"
-                className="min-w-0 flex-1 !px-3 !text-sm sm:flex-none sm:!px-7 sm:!text-base"
+                className="btn btn-ghost w-full justify-center sm:w-auto"
               >
-                Explore services
-              </GlassButton>
+                View services
+              </Link>
             </div>
-          </div>
+          </motion.div>
+        </div>
+      </motion.div>
 
-          <div className="relative mx-auto hidden w-full max-w-md lg:block xl:max-w-lg">
-            <div className="img-frame relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/20 bg-[#1a0f36]">
-              <Image
-                src="/images/hero.jpg"
-                alt="Laptop with code for a modern web product"
-                fill
-                className="object-cover opacity-90"
-                sizes="(max-width: 1280px) 28rem, 32rem"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-edev-ink/85 via-transparent to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-5">
-                <p className="text-sm uppercase tracking-[0.2em] text-edev-lilac/80">
-                  Web · Mobile · DevOps
-                </p>
-                <p className="mt-2 display text-xl font-semibold text-white">
-                  Systems that think, ship, and scale.
-                </p>
-              </div>
-            </div>
+      <div className="relative z-10 mt-auto border-t border-line/80">
+        <div className="overflow-hidden py-3.5 sm:py-4">
+          <div className="ticker mono text-[0.62rem] uppercase tracking-[0.16em] text-fog sm:text-[0.68rem] sm:tracking-[0.2em]">
+            {[...lanes, ...lanes].map((item, i) => (
+              <span
+                key={`${item}-${i}`}
+                className="inline-flex shrink-0 items-center gap-2 px-1"
+              >
+                <span className="text-lilac">◆</span>
+                {item}
+              </span>
+            ))}
           </div>
         </div>
       </div>

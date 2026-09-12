@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Atmosphere } from "@/components/ui/Atmosphere";
-import { GlassButton } from "@/components/ui/GlassButton";
 import { CTABand } from "@/components/home/CTABand";
 import { getService, services } from "@/data/content";
 import { siteConfig } from "@/lib/site";
@@ -44,109 +42,94 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-28 sm:pt-32">
-        <Atmosphere variant="dense" />
-        <div className="section-pad relative z-10 pb-14 pt-10 sm:pb-16">
-          <div className="container-edev grid items-center gap-10 lg:grid-cols-2">
-            <div>
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-edev-orchid">
-                Service
-              </p>
-              <h1 className="display text-balance text-4xl font-semibold text-white sm:text-5xl">
-                {service.title}
-              </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-edev-mist/75 sm:text-lg">
-                {service.description}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <GlassButton href="/contact" size="lg">
-                  Discuss this service
-                </GlassButton>
-                <GlassButton href="/services" size="lg">
-                  All services
-                </GlassButton>
-              </div>
-            </div>
-            <div className="img-frame relative aspect-[5/4] overflow-hidden rounded-[2rem] glass">
-              <Image
-                src={service.image}
-                alt={service.imageAlt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-edev-ink/70 via-transparent to-edev-violet/15" />
-            </div>
+      <section className="relative overflow-hidden pt-28 md:pt-36">
+        <div className="shell pb-12 md:pb-16">
+          <p className="eyebrow">Service</p>
+          <h1 className="mega mt-5 max-w-[12ch] text-[clamp(2.8rem,9vw,6rem)] text-paper">
+            {service.title}
+          </h1>
+          <p className="mt-7 max-w-2xl text-base leading-relaxed text-fog md:text-lg">
+            {service.description}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/contact" className="btn">
+              Discuss this service
+            </Link>
+            <Link href="/services" className="btn btn-ghost">
+              All services
+            </Link>
           </div>
+        </div>
+
+        <div className="relative h-[38vw] min-h-52 max-h-[26rem] w-full overflow-hidden border-y border-line">
+          <Image
+            src={service.image}
+            alt={service.imageAlt}
+            fill
+            className="object-cover opacity-65"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/40" />
         </div>
       </section>
 
-      <section className="section-pad py-16 sm:py-20">
-        <div className="container-edev grid gap-6 lg:grid-cols-2">
-          <div className="h-full rounded-3xl glass p-6 sm:p-8">
-            <h2 className="display text-2xl font-semibold text-white">
-              Outcomes
-            </h2>
-            <ul className="mt-6 space-y-3">
+      <section className="py-16 md:py-24">
+        <div className="shell grid gap-12 lg:grid-cols-2">
+          <div>
+            <p className="eyebrow">Outcomes</p>
+            <ul className="mt-6 space-y-0 divide-y divide-line border-y border-line">
               {service.outcomes.map((item) => (
-                <li
-                  key={item}
-                  className="rounded-2xl glass-soft px-4 py-3 text-sm text-edev-mist/80 sm:text-base"
-                >
+                <li key={item} className="py-5 text-paper md:text-lg">
                   {item}
                 </li>
               ))}
             </ul>
           </div>
-          <div className="h-full rounded-3xl glass p-6 sm:p-8">
-            <h2 className="display text-2xl font-semibold text-white">
-              Capabilities
-            </h2>
+          <div>
+            <p className="eyebrow">Capabilities</p>
             <div className="mt-6 flex flex-wrap gap-2">
               {service.capabilities.map((item) => (
                 <span
                   key={item}
-                  className="rounded-full glass-soft px-4 py-2 text-sm text-edev-mist/85"
+                  className="border border-line px-3 py-2 mono text-[0.68rem] uppercase tracking-[0.12em] text-fog"
                 >
                   {item}
                 </span>
               ))}
             </div>
-            <p className="mt-8 text-sm leading-relaxed text-edev-mist/65">
+            <p className="mt-8 text-sm leading-relaxed text-fog md:text-base">
               {service.summary}
             </p>
           </div>
         </div>
       </section>
 
-      <section className="section-pad pb-10">
-        <div className="container-edev">
-          <h2 className="display mb-6 text-2xl font-semibold text-white sm:text-3xl">
-            Related services
+      <section className="border-t border-line bg-panel py-16 md:py-20">
+        <div className="shell">
+          <p className="eyebrow">Related</p>
+          <h2 className="display mt-3 text-3xl text-paper md:text-4xl">
+            More capabilities
           </h2>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="mt-10 grid gap-px bg-line md:grid-cols-3">
             {related.map((item) => (
               <Link
                 key={item.slug}
                 href={`/services/${item.slug}`}
-                className="group block overflow-hidden rounded-3xl glass-soft"
+                className="group bg-panel transition-colors hover:bg-ink"
               >
-                <div className="img-frame relative h-36">
+                <div className="relative h-36 overflow-hidden">
                   <Image
                     src={item.image}
                     alt={item.imageAlt}
                     fill
-                    className="object-cover"
+                    className="object-cover opacity-55 transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-edev-ink to-transparent" />
                 </div>
                 <div className="p-5">
-                  <h3 className="display text-lg font-semibold text-white">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-edev-mist/65">{item.short}</p>
+                  <h3 className="display text-xl text-paper">{item.title}</h3>
+                  <p className="mt-2 text-sm text-fog">{item.short}</p>
                 </div>
               </Link>
             ))}

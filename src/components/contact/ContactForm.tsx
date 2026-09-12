@@ -1,8 +1,7 @@
 ﻿"use client";
 
 import { FormEvent, useState } from "react";
-import { GlassButton } from "@/components/ui/GlassButton";
-import { GlassSelect } from "@/components/ui/GlassSelect";
+import { FieldSelect } from "@/components/ui/FieldSelect";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -69,50 +68,60 @@ export function ContactForm() {
     <form onSubmit={onSubmit} className="space-y-4" noValidate>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block space-y-2">
-          <span className="text-sm text-edev-mist/70">Name</span>
+          <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
+            Name
+          </span>
           <input
             name="name"
             required
             autoComplete="name"
-            className="glass-input"
+            className="field"
             placeholder="Your name"
           />
         </label>
         <label className="block space-y-2">
-          <span className="text-sm text-edev-mist/70">Email</span>
+          <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
+            Email
+          </span>
           <input
             name="email"
             type="email"
             required
             autoComplete="email"
-            className="glass-input"
+            className="field"
             placeholder="you@company.com"
           />
         </label>
         <label className="block space-y-2">
-          <span className="text-sm text-edev-mist/70">Phone</span>
+          <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
+            Phone
+          </span>
           <input
             name="phone"
             type="tel"
             autoComplete="tel"
-            className="glass-input"
+            className="field"
             placeholder="+92 335 2389952"
           />
         </label>
         <label className="block space-y-2">
-          <span className="text-sm text-edev-mist/70">Company</span>
+          <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
+            Company
+          </span>
           <input
             name="company"
             autoComplete="organization"
-            className="glass-input"
+            className="field"
             placeholder="Optional"
           />
         </label>
       </div>
 
       <div className="block space-y-2">
-        <span className="text-sm text-edev-mist/70">Service interest</span>
-        <GlassSelect
+        <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
+          Service interest
+        </span>
+        <FieldSelect
           name="service"
           placeholder="Select a service"
           options={serviceOptions}
@@ -122,24 +131,26 @@ export function ContactForm() {
       </div>
 
       <label className="block space-y-2">
-        <span className="text-sm text-edev-mist/70">Message</span>
+        <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
+          Message
+        </span>
         <textarea
           name="message"
           required
           rows={5}
-          className="glass-input resize-y min-h-[140px]"
+          className="field min-h-[140px] resize-y"
           placeholder="Tell us what you’re building…"
         />
       </label>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <GlassButton type="submit" size="lg" disabled={status === "loading"}>
+        <button type="submit" className="btn" disabled={status === "loading"}>
           {status === "loading" ? "Sending…" : "Send message"}
-        </GlassButton>
+        </button>
         {message ? (
           <p
             className={`text-sm ${
-              status === "success" ? "text-edev-lilac" : "text-rose-300"
+              status === "success" ? "text-signal" : "text-heat"
             }`}
           >
             {message}

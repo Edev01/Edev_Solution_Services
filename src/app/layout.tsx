@@ -1,20 +1,31 @@
 ﻿import type { Metadata, Viewport } from "next";
-import { Syne, Sora } from "next/font/google";
+import { Archivo, Manrope, IBM_Plex_Mono } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { CursorGlow } from "@/components/ui/CursorGlow";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
-const syne = Syne({
+const archivo = Archivo({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-archivo",
   display: "swap",
   preload: true,
 });
 
-const sora = Sora({
+const manrope = Manrope({
   subsets: ["latin"],
-  variable: "--font-sora",
+  variable: "--font-manrope",
+  display: "swap",
+  preload: true,
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-plex",
   display: "swap",
   preload: true,
 });
@@ -73,10 +84,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0b0618" },
-    { media: "(prefers-color-scheme: light)", color: "#160b2e" },
-  ],
+  themeColor: "#07060f",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -103,34 +111,40 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${sora.variable}`}
-      style={{ backgroundColor: "#0b0618", colorScheme: "dark" }}
+      className={`${archivo.variable} ${manrope.variable} ${plexMono.variable}`}
+      style={{ backgroundColor: "#07060f", colorScheme: "dark" }}
     >
       <body
-        className="font-body antialiased"
+        className="antialiased"
         suppressHydrationWarning
         style={
           {
-            backgroundColor: "#0b0618",
+            backgroundColor: "#07060f",
             "--font-display":
-              "var(--font-syne), ui-sans-serif, system-ui, sans-serif",
+              "var(--font-archivo), ui-sans-serif, system-ui, sans-serif",
             "--font-body":
-              "var(--font-sora), ui-sans-serif, system-ui, sans-serif",
+              "var(--font-manrope), ui-sans-serif, system-ui, sans-serif",
+            "--font-mono":
+              "var(--font-plex), ui-monospace, monospace",
             fontFamily: "var(--font-body)",
           } as React.CSSProperties
         }
       >
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] glass-btn glass-btn-sm"
-        >
-          Skip to content
-        </a>
-        <Header />
-        <main id="main" className="relative z-10 min-h-[70vh]">
-          {children}
-        </main>
-        <Footer />
+        <SmoothScroll>
+          <ScrollProgress />
+          <CursorGlow />
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] btn"
+          >
+            Skip to content
+          </a>
+          <Header />
+          <main id="main" className="relative z-10 min-h-[70vh] overflow-x-hidden">
+            {children}
+          </main>
+          <Footer />
+        </SmoothScroll>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

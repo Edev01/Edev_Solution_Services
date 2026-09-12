@@ -1,26 +1,36 @@
-﻿"use client";
+"use client";
 
+import React from "react";
 import { motion, type HTMLMotionProps, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
-type FadeInProps = {
+type StaggerContainerProps = {
   children: ReactNode;
   className?: string;
-  delay?: number;
+  staggerDelay?: number;
   direction?: "up" | "down" | "left" | "right";
-  duration?: number;
 } & Omit<HTMLMotionProps<"div">, "children" | "initial" | "animate" | "transition" | "viewport">;
 
-export function FadeIn({
+export function StaggerContainer({
   children,
   className = "",
-  delay = 0,
+  staggerDelay = 0.1,
   direction = "up",
-  duration = 0.7,
   ...props
-}: FadeInProps) {
+}: StaggerContainerProps) {
   const reduced = useReducedMotion();
-  const variants = {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: staggerDelay,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
     hidden: {
       opacity: 0,
       y: direction === "up" ? 30 : direction === "down" ? -30 : 0,
@@ -30,6 +40,7 @@ export function FadeIn({
       opacity: 1,
       y: 0,
       x: 0,
+      transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
     },
   };
 
@@ -43,11 +54,15 @@ export function FadeIn({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      variants={variants}
-      transition={{ duration, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+      variants={containerVariants}
       {...props}
     >
-      {children}
+      {React.Children.map(children, (child) =>
+        React.isValidElement(child)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ? React.cloneElement(child as React.ReactElement<any>, { variants: itemVariants })
+          : child
+      )}
     </motion.div>
   );
 }
