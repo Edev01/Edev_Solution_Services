@@ -34,7 +34,6 @@ export function ContactForm({
     const payload = {
       name: String(data.get("name") || "").trim(),
       email: String(data.get("email") || "").trim(),
-      phone: String(data.get("phone") || "").trim(),
       company: String(data.get("company") || "").trim(),
       service: String(data.get("service") || "").trim(),
       message: String(data.get("message") || "").trim(),
@@ -103,19 +102,7 @@ export function ContactForm({
             placeholder="you@company.com"
           />
         </label>
-        <label className="block space-y-2">
-          <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
-            Phone
-          </span>
-          <input
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            className="field"
-            placeholder="+92 321 8995279"
-          />
-        </label>
-        <label className="block space-y-2">
+        <label className="block space-y-2 sm:col-span-2">
           <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
             Company
           </span>

@@ -18,6 +18,17 @@ function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M6.94 8.5H4.06V19h2.88V8.5zM5.5 7.25a1.67 1.67 0 1 0 0-3.34 1.67 1.67 0 0 0 0 3.34zM19.94 19h-2.87v-5.1c0-1.22-.02-2.78-1.7-2.78-1.7 0-1.96 1.33-1.96 2.7V19h-2.87V8.5h2.76v1.43h.04c.38-.73 1.32-1.5 2.72-1.5 2.91 0 3.45 1.92 3.45 4.41V19z" />
+    </svg>
+  );
+}
+
+const linkClass =
+  "inline-flex items-center justify-center border border-line bg-panel text-fog transition-colors hover:border-lilac hover:bg-signal hover:text-paper";
+
 export function SocialIcons({
   className = "",
   size = "md",
@@ -25,10 +36,7 @@ export function SocialIcons({
   className?: string;
   size?: "sm" | "md";
 }) {
-  const box =
-    size === "sm"
-      ? "h-10 w-10"
-      : "h-11 w-11";
+  const box = size === "sm" ? "h-10 w-10" : "h-11 w-11";
   const icon = size === "sm" ? "h-4 w-4" : "h-[1.15rem] w-[1.15rem]";
 
   return (
@@ -38,7 +46,7 @@ export function SocialIcons({
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Facebook"
-        className={`${box} inline-flex items-center justify-center border border-line bg-panel text-fog transition-colors hover:border-lilac hover:bg-signal hover:text-paper`}
+        className={`${box} ${linkClass}`}
       >
         <FacebookIcon className={icon} />
       </a>
@@ -47,9 +55,18 @@ export function SocialIcons({
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Instagram"
-        className={`${box} inline-flex items-center justify-center border border-line bg-panel text-fog transition-colors hover:border-lilac hover:bg-signal hover:text-paper`}
+        className={`${box} ${linkClass}`}
       >
         <InstagramIcon className={icon} />
+      </a>
+      <a
+        href={siteConfig.social.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+        className={`${box} ${linkClass}`}
+      >
+        <LinkedInIcon className={icon} />
       </a>
     </div>
   );

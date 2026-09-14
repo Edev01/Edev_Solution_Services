@@ -40,26 +40,18 @@ export function CTABand({ serviceSlug }: { serviceSlug?: string }) {
         <p className="mx-auto mt-5 max-w-lg text-sm text-fog sm:text-base">
           Tell us what you’re shipping.
         </p>
-        <div className="mx-auto mt-5 flex max-w-md flex-col items-center gap-2 text-sm sm:text-base">
-          <a
-            href={siteConfig.phoneHref}
-            className="text-paper transition-colors hover:text-lilac"
-          >
-            {siteConfig.phoneDisplay}
-          </a>
-          <a
-            href={`mailto:${siteConfig.email}`}
-            className="break-all text-paper transition-colors hover:text-lilac"
-          >
-            {siteConfig.email}
-          </a>
-        </div>
+        <a
+          href={`mailto:${siteConfig.email}`}
+          className="mx-auto mt-5 block max-w-md break-all text-sm text-paper transition-colors hover:text-lilac sm:text-base"
+        >
+          {siteConfig.email}
+        </a>
         <div className="mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
           <Link href={contactHref} className="btn">
             Start a project
           </Link>
-          <a href={siteConfig.phoneHref} className="btn btn-ghost">
-            Call us
+          <a href={`mailto:${siteConfig.email}`} className="btn btn-ghost">
+            Email us
           </a>
         </div>
       </motion.div>

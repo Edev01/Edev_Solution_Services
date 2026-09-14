@@ -188,12 +188,6 @@ export function Header() {
                 </Link>
                 <div className="flex items-center justify-between gap-4">
                   <SocialIcons size="sm" />
-                  <a
-                    href={siteConfig.phoneHref}
-                    className="mono text-[0.65rem] uppercase tracking-[0.14em] text-fog"
-                  >
-                    {siteConfig.phoneDisplay}
-                  </a>
                 </div>
               </motion.div>
             </nav>

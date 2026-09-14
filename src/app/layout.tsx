@@ -103,9 +103,12 @@ export default function RootLayout({
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo.png`,
     email: siteConfig.email,
-    telephone: siteConfig.phoneHref,
     description: siteConfig.description,
-    sameAs: [siteConfig.social.facebook, siteConfig.social.instagram],
+    sameAs: [
+      siteConfig.social.facebook,
+      siteConfig.social.instagram,
+      siteConfig.social.linkedin,
+    ],
   };
 
   return (

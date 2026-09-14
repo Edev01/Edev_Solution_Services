@@ -1,12 +1,13 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { SocialIcons } from "@/components/ui/SocialIcons";
 import { resolveContactService } from "@/lib/contact-services";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: `Contact ${siteConfig.legalName}. Call ${siteConfig.phoneDisplay} or email ${siteConfig.email}.`,
+  description: `Contact ${siteConfig.legalName}. Email ${siteConfig.email}.`,
   alternates: { canonical: "/contact" },
 };
 
@@ -34,16 +35,14 @@ export default async function ContactPage({ searchParams }: Props) {
               Preselected · {initialService}
             </p>
           ) : null}
-          <div className="mt-10 flex flex-col gap-3">
-            <a href={siteConfig.phoneHref} className="btn w-full sm:w-auto">
-              {siteConfig.phoneDisplay}
-            </a>
+          <div className="mt-10 flex flex-col gap-4">
             <a
               href={`mailto:${siteConfig.email}`}
               className="btn btn-ghost w-full break-all sm:w-auto"
             >
               {siteConfig.email}
             </a>
+            <SocialIcons />
           </div>
           <p className="mt-10 mono text-[0.68rem] uppercase tracking-[0.16em] text-fog">
             Or browse{" "}

@@ -33,9 +33,6 @@ export function Footer() {
               {siteConfig.description}
             </p>
             <div className="mt-6 space-y-2 text-sm text-paper">
-              <a href={siteConfig.phoneHref} className="block hover:text-lilac">
-                {siteConfig.phoneDisplay}
-              </a>
               <a
                 href={`mailto:${siteConfig.email}`}
                 className="block break-all hover:text-lilac"

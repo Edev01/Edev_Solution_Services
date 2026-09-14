@@ -48,23 +48,58 @@ export default function AboutPage() {
   return (
     <>
       <section className="relative overflow-hidden pt-28 md:pt-36">
-        <div className="shell pb-16 md:pb-24">
-          <p className="eyebrow">About</p>
-          <h1 className="mega mt-5 max-w-[12ch] text-[clamp(3rem,10vw,7rem)] text-paper">
-            Systems that feel human to use
-          </h1>
-          <p className="mt-8 max-w-2xl text-base leading-relaxed text-fog md:text-lg">
-            {siteConfig.name} is a solutions studio for web platforms, mobile
-            products, cloud infrastructure, and autonomous agent workflows,
-            delivered with one visual language and one engineering standard.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Link href="/contact" className="btn">
-              Work with us
-            </Link>
-            <Link href="/services" className="btn btn-ghost">
-              See services
-            </Link>
+        <div className="shell grid items-center gap-10 pb-16 md:pb-24 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+          <div>
+            <p className="eyebrow">About</p>
+            <h1 className="mega mt-5 max-w-[12ch] text-[clamp(3rem,10vw,7rem)] text-paper">
+              Systems that feel human to use
+            </h1>
+            <p className="mt-8 max-w-2xl text-base leading-relaxed text-fog md:text-lg">
+              {siteConfig.name} is a solutions studio for web platforms, mobile
+              products, cloud infrastructure, and autonomous agent workflows,
+              delivered with one visual language and one engineering standard.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link href="/contact" className="btn">
+                Work with us
+              </Link>
+              <Link href="/services" className="btn btn-ghost">
+                See services
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+            <div className="relative aspect-square overflow-hidden border border-line bg-panel">
+              <Image
+                src="/images/consulting.png"
+                alt=""
+                fill
+                className="object-cover opacity-75"
+                sizes="(max-width: 1024px) 100vw, 40vw"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-transparent" />
+              <div className="absolute inset-0 flex items-center justify-center p-10 sm:p-14">
+                <div className="relative h-full w-full max-h-56 max-w-56">
+                  <Image
+                    src="/logo-mark.png"
+                    alt={`${siteConfig.name} logo`}
+                    fill
+                    className="object-contain opacity-90 drop-shadow-[0_0_40px_rgba(176,124,255,0.35)]"
+                    unoptimized
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-3 flex items-center justify-between border border-line bg-ink px-4 py-3">
+              <span className="mono text-[0.65rem] uppercase tracking-[0.16em] text-lilac">
+                Studio
+              </span>
+              <span className="mono text-[0.65rem] uppercase tracking-[0.14em] text-fog">
+                Built to ship
+              </span>
+            </div>
           </div>
         </div>
 
@@ -75,7 +110,6 @@ export default function AboutPage() {
             fill
             className="object-cover opacity-70"
             sizes="100vw"
-            priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/30 to-transparent" />
         </div>
