@@ -1,10 +1,7 @@
 ﻿import type { Metadata, Viewport } from "next";
 import { Archivo, Manrope, IBM_Plex_Mono } from "next/font/google";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
-import { CursorGlow } from "@/components/ui/CursorGlow";
-import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -127,26 +124,13 @@ export default function RootLayout({
               "var(--font-archivo), ui-sans-serif, system-ui, sans-serif",
             "--font-body":
               "var(--font-manrope), ui-sans-serif, system-ui, sans-serif",
-            "--font-mono":
-              "var(--font-plex), ui-monospace, monospace",
+            "--font-mono": "var(--font-plex), ui-monospace, monospace",
             fontFamily: "var(--font-body)",
           } as React.CSSProperties
         }
       >
         <SmoothScroll>
-          <ScrollProgress />
-          <CursorGlow />
-          <a
-            href="#main"
-            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] btn"
-          >
-            Skip to content
-          </a>
-          <Header />
-          <main id="main" className="relative z-10 min-h-[70vh] overflow-x-hidden">
-            {children}
-          </main>
-          <Footer />
+          <SiteChrome>{children}</SiteChrome>
         </SmoothScroll>
         <script
           type="application/ld+json"

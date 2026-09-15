@@ -8,6 +8,8 @@ const footerLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
+  { href: "/work", label: "Work" },
+  { href: "/blogs", label: "Blogs" },
   { href: "/contact", label: "Contact" },
 ];
 

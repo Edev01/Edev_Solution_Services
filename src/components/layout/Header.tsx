@@ -12,7 +12,9 @@ const links = [
   { href: "/", label: "Home", index: "01" },
   { href: "/about", label: "About", index: "02" },
   { href: "/services", label: "Services", index: "03" },
-  { href: "/contact", label: "Contact", index: "04" },
+  { href: "/work", label: "Work", index: "04" },
+  { href: "/blogs", label: "Blogs", index: "05" },
+  { href: "/contact", label: "Contact", index: "06" },
 ];
 
 function MenuToggle({
