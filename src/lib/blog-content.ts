@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
 const HTML_TAG_RE = /<\/?[a-z][\s\S]*>/i;
 
@@ -24,11 +24,10 @@ export function plainTextFromContent(content: string) {
     .trim();
 }
 
-/** Sanitize HTML for safe public rendering. */
+/** Sanitize HTML for safe public rendering (Node-safe, Vercel-compatible). */
 export function sanitizeBlogHtml(content: string) {
-  return DOMPurify.sanitize(content, {
-    USE_PROFILES: { html: true },
-    ALLOWED_TAGS: [
+  return sanitizeHtml(content, {
+    allowedTags: [
       "p",
       "br",
       "strong",
@@ -49,7 +48,17 @@ export function sanitizeBlogHtml(content: string) {
       "pre",
       "hr",
     ],
-    ALLOWED_ATTR: ["href", "target", "rel", "class"],
+    allowedAttributes: {
+      a: ["href", "target", "rel"],
+      "*": ["class"],
+    },
+    allowedSchemes: ["http", "https", "mailto"],
+    transformTags: {
+      a: sanitizeHtml.simpleTransform("a", {
+        rel: "noopener noreferrer",
+        target: "_blank",
+      }),
+    },
   });
 }
 
