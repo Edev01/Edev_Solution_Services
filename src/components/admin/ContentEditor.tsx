@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { RichTextEditor } from "@/components/admin/RichTextEditor";
 
 type MediaValue = {
   url: string;
@@ -195,17 +196,19 @@ export function ContentEditor({
               onChange={(e) => setExcerpt(e.target.value)}
             />
           </label>
-          <label className="block space-y-2">
+          <div className="block space-y-2">
             <span className="mono text-[0.68rem] uppercase tracking-[0.14em] text-fog">
               Content
             </span>
-            <textarea
-              className="field min-h-48"
+            <p className="text-sm text-fog">
+              Use the toolbar for headings, bold, italic, lists, and links.
+            </p>
+            <RichTextEditor
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={setContent}
               required
             />
-          </label>
+          </div>
         </>
       ) : (
         <>

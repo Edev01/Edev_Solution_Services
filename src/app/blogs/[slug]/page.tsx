@@ -5,6 +5,12 @@ import { notFound } from "next/navigation";
 import { CTABand } from "@/components/home/CTABand";
 import { FadeIn } from "@/components/ui/FadeIn";
 import { getPublishedBlogBySlug, getPublishedBlogs } from "@/lib/content-store";
+import {
+  isRichHtml,
+  plainTextFromContent,
+  sanitizeBlogHtml,
+  splitPlainParagraphs,
+} from "@/lib/blog-content";
 import { siteConfig } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -21,24 +27,19 @@ function formatDate(value: Date | string) {
   });
 }
 
-function splitParagraphs(content: string) {
-  return content
-    .split(/\n\s*\n/)
-    .map((block) => block.replace(/\n/g, " ").trim())
-    .filter(Boolean);
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const blog = await getPublishedBlogBySlug(slug);
   if (!blog) return { title: "Blog not found" };
   return {
     title: blog.title,
-    description: blog.excerpt || blog.content.slice(0, 150),
+    description:
+      blog.excerpt || plainTextFromContent(blog.content).slice(0, 150),
     alternates: { canonical: `/blogs/${blog.slug}` },
     openGraph: {
       title: `${blog.title} · ${siteConfig.name}`,
-      description: blog.excerpt || blog.content.slice(0, 150),
+      description:
+        blog.excerpt || plainTextFromContent(blog.content).slice(0, 150),
       images: blog.coverImageUrl
         ? [{ url: blog.coverImageUrl, alt: blog.title }]
         : undefined,
@@ -57,11 +58,14 @@ export default async function BlogDetailPage({ params }: Props) {
 
   const cover = blog.images[0] || null;
   const gallery = blog.images.slice(1);
-  const paragraphs = splitParagraphs(blog.content);
+  const rich = isRichHtml(blog.content);
+  const safeHtml = rich ? sanitizeBlogHtml(blog.content) : "";
+  const paragraphs = rich ? [] : splitPlainParagraphs(blog.content);
+  const plain = plainTextFromContent(blog.content);
   const published = formatDate(blog.createdAt);
   const readMins = Math.max(
     1,
-    Math.ceil(blog.content.split(/\s+/).filter(Boolean).length / 200)
+    Math.ceil(plain.split(/\s+/).filter(Boolean).length / 200)
   );
 
   return (
@@ -148,16 +152,23 @@ export default async function BlogDetailPage({ params }: Props) {
         <section className="py-10 md:py-14">
           <div className="shell max-w-3xl">
             <FadeIn>
-              <div className="space-y-6">
-                {paragraphs.map((paragraph, index) => (
-                  <p
-                    key={index}
-                    className="text-base leading-[1.85] text-fog md:text-lg"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
+              {rich ? (
+                <div
+                  className="blog-prose"
+                  dangerouslySetInnerHTML={{ __html: safeHtml }}
+                />
+              ) : (
+                <div className="space-y-6">
+                  {paragraphs.map((paragraph, index) => (
+                    <p
+                      key={index}
+                      className="text-base leading-[1.85] text-fog md:text-lg"
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              )}
             </FadeIn>
 
             {gallery.length > 0 ? (
@@ -234,7 +245,8 @@ export default async function BlogDetailPage({ params }: Props) {
                     <div className="flex flex-1 flex-col p-5">
                       <h3 className="display text-xl text-paper">{item.title}</h3>
                       <p className="mt-2 flex-1 text-sm text-fog line-clamp-2">
-                        {item.excerpt || item.content.slice(0, 100)}
+                        {item.excerpt ||
+                          plainTextFromContent(item.content).slice(0, 100)}
                       </p>
                       <span className="mt-4 text-sm text-lilac">Read →</span>
                     </div>

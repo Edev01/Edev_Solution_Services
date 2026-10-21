@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getPublishedBlogs } from "@/lib/content-store";
+import { plainTextFromContent } from "@/lib/blog-content";
 import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -94,7 +95,8 @@ export default async function BlogsPage() {
                     {blog.title}
                   </h2>
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-fog">
-                    {blog.excerpt || blog.content.slice(0, 140)}
+                    {blog.excerpt ||
+                      plainTextFromContent(blog.content).slice(0, 140)}
                   </p>
                   <span className="mt-5 text-sm text-lilac">Read →</span>
                 </div>
